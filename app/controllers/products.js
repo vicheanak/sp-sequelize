@@ -75,6 +75,7 @@ exports.todayOrders = function(req, res){
                     GROUP BY p.id, mo.amount
                     `, { type: sequelize.QueryTypes.SELECT})
                     .then(function(orders) {
+                        console.log('todayOrders ==> ', orders);
                         return res.jsonp(orders);
                     });
     // sequelize.query(`SELECT p.id,
