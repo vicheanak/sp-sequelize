@@ -57,6 +57,7 @@ exports.todayOrders = function(req, res){
     var date = moment().date();
     var month = moment().month() + 1;
     var year = moment().year();
+    var daysInMonth = moment().daysInMonth();
     sequelize.query(`SELECT p.id,
                     p.name,
                     p.nameKh,
@@ -64,10 +65,10 @@ exports.todayOrders = function(req, res){
                     mo.amount as monthlyCaseTarget,
                     p.pieces,
                     p.star,
-                    mo.amount/DAY(LAST_DAY(now())) as dailyCaseTarget,
-                    (((mo.amount * p.pieces)/DAY(LAST_DAY(now())) ) * ${date} - (SELECT COALESCE(SUM(o1.amount), 0) FROM Orders AS o1 WHERE o1.ProductId = p.id AND DATE(o1.orderDate) < '${today}' AND o1.orderMonth = ${month} AND o1.orderYear = ${year})) as dailyPieceTarget,
+                    mo.amount/${daysInMonth} as dailyCaseTarget,
+                    (((mo.amount * p.pieces)/${daysInMonth} ) * ${date} - (SELECT COALESCE(SUM(o1.amount), 0) FROM Orders AS o1 WHERE o1.ProductId = p.id AND DATE(o1.orderDate) < '${today}' AND o1.orderMonth = ${month} AND o1.orderYear = ${year})) as dailyPieceTarget,
                         SUM(o.amount) AS todaySale,
-                    ((mo.amount * p.pieces) / DAY(LAST_DAY(now())) ) - SUM(o.amount) AS remainingSale
+                    ((mo.amount * p.pieces) / ${daysInMonth} ) - SUM(o.amount) AS remainingSale
                     FROM Products AS p
                     INNER JOIN Orders AS o ON o.ProductId = p.id
                     INNER JOIN MonthlyOrders AS mo ON mo.ProductId = p.id AND mo.UserId = ${userId}
