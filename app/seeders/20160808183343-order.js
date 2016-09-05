@@ -5,12 +5,12 @@ module.exports = {
   up: function (queryInterface, Sequelize) {
    var data = [];
 
-   var products = [17, 150, 150, 5, 20, 25, 25, 1, 1, 1, 400];
+   var products = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30];
    
    var outlets = [1,2];
 
    for (var i = 0; i < products.length; i ++){
-       for (var k = 0; k < 62; k ++){
+       for (var k = 1; k < 62; k ++){
            var date = moment().subtract(k, 'days').format("YYYY-MM-DD HH:mm:ss");
            var day = moment().subtract(k, 'days').format("DD");
            var month = moment().subtract(k, 'days').format("MM");

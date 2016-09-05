@@ -6,84 +6,84 @@ module.exports = {
       var now = moment().format("YYYY-MM-DD HH:mm:ss");
       return queryInterface.bulkInsert('MonthlyOrders', [
           {
-              amount: 17,
+              amount: 30,
               productId: 1,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 6,
+              amount: 30,
               productId: 2,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 15,
+              amount: 30,
               productId: 3,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 22,
+              amount: 30,
               productId: 4,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 15,
+              amount: 30,
               productId: 5,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 5,
+              amount: 30,
               productId: 6,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 5,
+              amount: 30,
               productId: 7,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 0.5,
+              amount: 30,
               productId: 8,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 0.5,
+              amount: 30,
               productId: 9,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 1,
+              amount: 30,
               productId: 10,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 25,
+              amount: 30,
               productId: 11,
               userId: 2,
               createdAt: now,
               updatedAt: now
           },
           {
-              amount: 10,
+              amount: 30,
               productId: 1,
               userId: 3,
               createdAt: now,
