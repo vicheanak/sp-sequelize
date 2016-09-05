@@ -150,6 +150,7 @@ exports.todayOutlets = function(req, res){
                         ORDER BY ord.orderDate DESC
                     `, { type: sequelize.QueryTypes.SELECT})
         .then(function(orders) {
+            console.log('todayOutlets ===> ', orders);
         return res.jsonp(orders);
     });
 };
