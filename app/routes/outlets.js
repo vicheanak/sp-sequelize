@@ -24,6 +24,9 @@ app.route('/outlets/:outletId')
 app.options('/todayOutlets/users/:userId', cors());
 app.route('/todayOutlets/users/:userId')
 	.get(cors(), users.requiredAuth, outlets.todayOutlets);
+app.options('/countThisMonthOutlets/users/:userId', cors());
+app.route('/countThisMonthOutlets/users/:userId')
+	.get(cors(), users.requiredAuth, outlets.countThisMonthOutlets);
 app.options('/todayOutlets/users/:userId/outlets/:outletId/orderDate/:orderDate', cors());
 app.route('/todayOutlets/users/:userId/outlets/:outletId/orderDate/:orderDate')
 	.get(cors(), outlets.todayOutletsByOutlet);

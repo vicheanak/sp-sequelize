@@ -15,7 +15,6 @@ var sequelize = new Sequelize(config.development.database, config.development.us
  * Its purpose is to preload the product on the req object then call the next function.
  */
 exports.product = function(req, res, next, id) {
-    console.log('id => ' + id);
     db.Product.find({where: {id: id}, include: [{model:db.Category, attributes:['id', 'name']}]}).then(function(product){
         if(!product) {
             return next(new Error('Failed to load product ' + id));
@@ -53,7 +52,6 @@ exports.thisMonthOrders = function(req, res){
 }
 
 exports.todayOrders = function(req, res){
-    console.log('today orders ================> ');
     var userId = req.params.userId;
     var today = moment().format("YYYY-MM-DD");
     sequelize.query(`SELECT p.id,
@@ -74,7 +72,6 @@ exports.todayOrders = function(req, res){
                     GROUP BY p.id, mo.amount
                     `, { type: sequelize.QueryTypes.SELECT})
                     .then(function(orders) {
-                        console.log('###ORDERS', orders);
                         return res.jsonp(orders);
                     });
     // sequelize.query(`SELECT p.id,
@@ -94,7 +91,6 @@ exports.todayOrders = function(req, res){
     //                 GROUP BY p.id, mo.amount
     //                 `, { type: sequelize.QueryTypes.SELECT})
     //                 .then(function(orders) {
-    //                     console.log('###ORDERS', orders);
     //                     return res.jsonp(orders);
     //                 });
 }

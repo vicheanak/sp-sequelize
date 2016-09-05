@@ -16,7 +16,6 @@ var sequelize = new Sequelize(config.development.database, config.development.us
  * Its purpose is to preload the outlet on the req object then call the next function.
  */
 exports.outlet = function(req, res, next, id) {
-    console.log('id => ' + id);
     db.Outlet.find({where: {id: id}, include: [{model:db.Distributor, attributes:['id', 'dtCode', 'dtName', 'dtNameKh']}]}).then(function(outlet){
         if(!outlet) {
             return next(new Error('Failed to load outlet ' + id));
@@ -141,19 +140,37 @@ exports.activeOutlets = function(req, res) {
 
 exports.todayOutlets = function(req, res){
     var userId = req.params.userId;
+    var today = moment().format("YYYY-MM-DD");
     sequelize.query(`SELECT DISTINCT outlet.id, outlet.outletName, outlet.outletNameKh, ord.orderDate, CURDATE() as currentDate
                         FROM Outlets AS outlet
                             INNER JOIN Orders AS ord
                             ON ord.OutletId = outlet.id
-                        WHERE DATE(ord.orderDate) = CURDATE()
+                        WHERE DATE(ord.orderDate) = '${today}'
                             AND ord.UserId = ${userId}
                         ORDER BY ord.orderDate DESC
                     `, { type: sequelize.QueryTypes.SELECT})
         .then(function(orders) {
-            console.log(orders);
         return res.jsonp(orders);
     });
 };
+
+
+exports.countThisMonthOutlets = function(req, res){
+    var userId = req.params.userId;
+    var month = moment().month() + 1;
+    var year = moment().year();
+    sequelize.query(`SELECT DISTINCT outlet.id, ord.orderDate
+                    FROM Outlets AS outlet
+                    INNER JOIN Orders AS ord
+                    ON ord.OutletId = outlet.id
+                    WHERE ord.UserId = ${userId} 
+                    AND ord.orderMonth = ${month}
+                    AND ord.orderYear = ${year}
+                    `, { type: sequelize.QueryTypes.SELECT})
+            .then(function(outlets) {
+                return res.jsonp(outlets);
+            });
+}
 
 exports.todayOutletsByOutlet = function(req, res){
     var userId = req.params.userId;
