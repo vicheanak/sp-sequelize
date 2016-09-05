@@ -23,6 +23,8 @@ module.exports = function(app, passport) {
 
     app.use(function (req, res, next) {
 
+        winston.info('Allow Cross Origin Success');
+
         // Website you wish to allow to connect
         res.setHeader('Access-Control-Allow-Origin', '*');
 

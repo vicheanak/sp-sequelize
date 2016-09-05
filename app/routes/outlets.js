@@ -23,7 +23,7 @@ app.route('/outlets/:outletId')
     // .delete(cors(), users.isAdmin, users.requiredAuth, outlets.destroy);
 app.options('/todayOutlets/users/:userId', cors());
 app.route('/todayOutlets/users/:userId')
-	.get(cors(), outlets.todayOutlets);
+	.get(cors(), users.requiredAuth, outlets.todayOutlets);
 app.options('/todayOutlets/users/:userId/outlets/:outletId/orderDate/:orderDate', cors());
 app.route('/todayOutlets/users/:userId/outlets/:outletId/orderDate/:orderDate')
 	.get(cors(), outlets.todayOutletsByOutlet);
