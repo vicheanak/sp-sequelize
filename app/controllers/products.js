@@ -149,6 +149,7 @@ exports.update = function(req, res) {
         inventoryCode: req.body.inventoryCode,
         name: req.body.name,
         nameKh: req.body.nameKh,
+        unitKh: req.body.unitKh,
         monthlyCaseTarget: req.body.monthlyCaseTarget,
         pieces: req.body.pieces,
         freeInQty: req.body.freeInQty,
