@@ -23,10 +23,10 @@ app.route('/products/:productId')
     // .delete(cors(), users.isAdmin, users.requiredAuth, products.destroy);
 app.options('/thisMonthOrders/:userId', cors());
 app.route('/thisMonthOrders/:userId')
-	.get(cors(), users.requiredAuth, products.thisMonthOrders)
+	.get(cors(), users.requiredAuth, products.thisMonthOrders);
 app.options('/todayOrders/:userId', cors());
 app.route('/todayOrders/:userId')
-	.get(cors(), users.requiredAuth, products.todayOrders)
+	.get(cors(), users.requiredAuth, products.todayOrders);
 
 // Finish with setting up the productId param
 // Note: the products.product function will be called everytime then it will call the next function.

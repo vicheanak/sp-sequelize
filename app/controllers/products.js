@@ -29,8 +29,9 @@ exports.product = function(req, res, next, id) {
 
 
 exports.thisMonthOrders = function(req, res){
-    console.log('this month order');
     var userId = req.params.userId;
+    var month = moment().month() + 1;
+    var year = moment().year();
     sequelize.query(`SELECT p.id,
                     p.name,
                     p.nameKh,
@@ -38,18 +39,34 @@ exports.thisMonthOrders = function(req, res){
                     mo.amount as monthlyCaseTarget,
                     p.pieces,
                     p.star,
-                    SUM(o.amount)/p.pieces AS totalSale, 
-                    mo.amount - (SUM(o.amount)/p.pieces) AS remainingSale
+                    (SELECT SUM(o.amount) FROM Orders AS o WHERE o.ProductId = p.id AND o.UserId = ${userId} AND o.orderMonth = ${month} AND o.orderYear = ${year})/p.pieces AS totalSale
                     FROM Products AS p
-                    INNER JOIN Orders AS o ON o.ProductId = p.id
-                    INNER JOIN MonthlyOrders AS mo ON mo.ProductId = p.id AND mo.UserId = ${userId}
-                    WHERE o.UserId = ${userId} AND o.orderMonth = MONTH(curdate()) AND o.orderYear = YEAR(curdate())
+                    LEFT OUTER JOIN MonthlyOrders AS mo ON mo.ProductId = p.id AND mo.UserId = ${userId}
                     GROUP BY p.id, mo.amount
                     `, { type: sequelize.QueryTypes.SELECT})
                     .then(function(orders) {
                         return res.jsonp(orders);
                     });
+    // sequelize.query(`SELECT p.id,
+    //                 p.name,
+    //                 p.nameKh,
+    //                 p.unitKh,
+    //                 mo.amount as monthlyCaseTarget,
+    //                 p.pieces,
+    //                 p.star,
+    //                 SUM(o.amount)/p.pieces AS totalSale, 
+    //                 mo.amount - (SUM(o.amount)/p.pieces) AS remainingSale
+    //                 FROM Products AS p
+    //                 INNER JOIN Orders AS o ON o.ProductId = p.id
+    //                 INNER JOIN MonthlyOrders AS mo ON mo.ProductId = p.id AND mo.UserId = ${userId}
+    //                 WHERE o.UserId = ${userId} AND o.orderMonth = MONTH(curdate()) AND o.orderYear = YEAR(curdate())
+    //                 GROUP BY p.id, mo.amount
+    //                 `, { type: sequelize.QueryTypes.SELECT})
+    //                 .then(function(orders) {
+    //                     return res.jsonp(orders);
+    //                 });
 }
+
 
 exports.todayOrders = function(req, res){
     var userId = req.params.userId;
@@ -66,19 +83,40 @@ exports.todayOrders = function(req, res){
                     p.pieces,
                     p.star,
                     mo.amount/${daysInMonth} as dailyCaseTarget,
-                    (((mo.amount * p.pieces)/${daysInMonth} ) * ${date} - (SELECT COALESCE(SUM(o1.amount), 0) FROM Orders AS o1 WHERE o1.ProductId = p.id AND DATE(o1.orderDate) < '${today}' AND o1.orderMonth = ${month} AND o1.orderYear = ${year})) as dailyPieceTarget,
-                        SUM(o.amount) AS todaySale,
-                    ((mo.amount * p.pieces) / ${daysInMonth} ) - SUM(o.amount) AS remainingSale
+                    (((mo.amount * p.pieces)/${daysInMonth} ) * ${date} - (SELECT COALESCE(SUM(o1.amount), 0) FROM Orders AS o1 WHERE o1.ProductId = p.id AND DATE(o1.orderDate) < '${today}' AND o1.orderMonth = ${month} AND o1.orderYear = ${year} AND o1.UserId = ${userId})) as dailyPieceTarget,
+                        (SELECT SUM(o.amount) FROM Orders AS o WHERE o.orderDay = ${date} AND o.orderMonth = ${month} AND o.orderYear = ${year} AND o.UserId = ${userId} AND o.ProductId = p.id) AS todaySale
                     FROM Products AS p
-                    INNER JOIN Orders AS o ON o.ProductId = p.id
-                    INNER JOIN MonthlyOrders AS mo ON mo.ProductId = p.id AND mo.UserId = ${userId}
-                    WHERE o.orderDay = ${date} AND o.orderMonth = ${month} AND o.orderYear = ${year} AND o.UserId = ${userId}
+                    LEFT OUTER JOIN MonthlyOrders AS mo ON mo.ProductId = p.id AND mo.UserId = ${userId}
                     GROUP BY p.id, mo.amount
                     `, { type: sequelize.QueryTypes.SELECT})
                     .then(function(orders) {
                         console.log('todayOrders ==> ', orders);
                         return res.jsonp(orders);
                     });
+
+    // sequelize.query(`SELECT p.id,
+    //                 p.name,
+    //                 p.nameKh,
+    //                 p.unitKh,
+    //                 mo.amount as monthlyCaseTarget,
+    //                 p.pieces,
+    //                 p.star,
+    //                 mo.amount/${daysInMonth} as dailyCaseTarget,
+    //                 (((mo.amount * p.pieces)/${daysInMonth} ) * ${date} - (SELECT COALESCE(SUM(o1.amount), 0) FROM Orders AS o1 WHERE o1.ProductId = p.id AND DATE(o1.orderDate) < '${today}' AND o1.orderMonth = ${month} AND o1.orderYear = ${year} AND o1.UserId = ${userId})) as dailyPieceTarget,
+    //                     SUM(o.amount) AS todaySale,
+    //                 ((mo.amount * p.pieces) / ${daysInMonth} ) - SUM(o.amount) AS remainingSale
+    //                 FROM Products AS p
+    //                 LEFT OUTER JOIN Orders AS o ON o.ProductId = p.id
+    //                 INNER JOIN MonthlyOrders AS mo ON mo.ProductId = p.id AND mo.UserId = ${userId}
+    //                 WHERE o.orderDay = ${date} AND o.orderMonth = ${month} AND o.orderYear = ${year} AND o.UserId = ${userId}
+    //                 GROUP BY p.id, mo.amount
+    //                 `, { type: sequelize.QueryTypes.SELECT})
+    //                 .then(function(orders) {
+    //                     console.log('todayOrders ==> ', orders);
+    //                     return res.jsonp(orders);
+    //                 });
+                
+
     // sequelize.query(`SELECT p.id,
     //                 p.name,
     //                 p.nameKh,
