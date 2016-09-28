@@ -13,7 +13,7 @@ module.exports = {
           {id: 7, name: 'Sunsilk', createdAt: now, updatedAt: now}
       ];
 
-      return queryInterface.bulkInsert('Categories', data);
+      // return queryInterface.bulkInsert('Categories', data);
   },
 
   down: function (queryInterface, Sequelize) {
