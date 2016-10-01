@@ -15,41 +15,6 @@ exports.authCallback = function(req, res, next) {
     res.redirect('/');
 };
 
-/**
- * Show login form
- */
-exports.signin = function(req, res) {
-    res.render('users/signin', {
-        title: 'Signin',
-        message: req.flash('error')
-    });
-};
-
-/**
- * Show sign up form
- */
-exports.signup = function(req, res) {
-    res.render('users/signup', {
-        title: 'Sign up',
-    });
-};
-
-/**
- * Logout
- */
-exports.signout = function(req, res) {
-    console.log('Logout: { id: ' + req.user.id + ', username: ' + req.user.username + '}');
-    req.logout();
-    return res.send({status : 'success', message : 'User logout successfully.'});
-};
-
-/**
- * Session
- */
-exports.session = function(req, res) {
-    return res.send({status : 'success', message : 'User login successfully.'})
-   // res.redirect('/');
-};
 
 exports.create = function(req, res, next){
 
@@ -318,13 +283,6 @@ exports.mobileAuthenticate = function(req,res){
         }
     })
 }
-/**
- * Send User
- */
-exports.me = function(req, res) {
-    res.jsonp(req.user || null);
-};
-
 /**
  * Find user by id
  */
