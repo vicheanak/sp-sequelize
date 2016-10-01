@@ -1,4 +1,5 @@
 'use strict';
+require('look').start(5959, 'api.unibookkh.com');
 
 /**
  * Module dependencies.

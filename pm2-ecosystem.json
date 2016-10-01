@@ -1,13 +1,13 @@
 {
   "apps" : [{
     // mean-stack-relational app
-    "name"       : "msr",
+    "name"       : "sp_server",
     "script"     : "app.js",
     // by default, the app runs in fork mode, uncomment below to run in cluster mode
     //"instances"  : 4,
     //"exec_mode"  : "cluster_mode",  // defaults to fork
     "args"        : ["--color"],
-    "watch"       : true,
+    "watch"       : false,
     "ignore_watch" : ["pids", "logs", "node_modules", "bower_components"],
     "merge_logs"  : true, // merge logs from all instances in cluster mode
     "cwd"         : ".",
