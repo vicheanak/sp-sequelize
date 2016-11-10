@@ -1,6 +1,13 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
+    /**
+    Remove orderDate constraint
+    orderDate: {
+        type: DataTypes.DATE,
+    -   unique: 'Orders_ProductId_OutletId_unique'
+    },
+    **/
 
 	var Order = sequelize.define('Order', {
 			id: {
@@ -12,9 +19,8 @@ module.exports = function(sequelize, DataTypes) {
 				type: DataTypes.INTEGER
 			},
 			orderDate: {
-				type: DataTypes.DATE,
-				unique: 'Orders_ProductId_OutletId_unique'
-			},
+                type: DataTypes.DATE
+            },
             orderDay: {
                 type: DataTypes.INTEGER
             },

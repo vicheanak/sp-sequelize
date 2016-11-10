@@ -142,17 +142,17 @@ exports.todayOutlets = function(req, res){
     var userId = req.params.userId;
     var today = moment().format("YYYY-MM-DD");
     sequelize.query(`SELECT DISTINCT outlet.id, outlet.outletName, outlet.outletNameKh, ord.orderDate, CURDATE() as currentDate
-                        FROM Outlets AS outlet
-                            INNER JOIN Orders AS ord
-                            ON ord.OutletId = outlet.id
-                        WHERE DATE(ord.orderDate) = '${today}'
-                            AND ord.UserId = ${userId}
-                        ORDER BY ord.orderDate DESC
+                    FROM Outlets AS outlet
+                    INNER JOIN Orders AS ord
+                    ON ord.OutletId = outlet.id
+                    WHERE DATE(ord.orderDate) = '${today}'
+                    AND ord.UserId = ${userId}
+                    ORDER BY ord.orderDate DESC
                     `, { type: sequelize.QueryTypes.SELECT})
-        .then(function(orders) {
-            console.log('todayOutlets ===> ', orders);
-        return res.jsonp(orders);
-    });
+                    .then(function(orders) {
+                        console.log('todayOutlets ===> ', orders);
+                        return res.jsonp(orders);
+                    });
 };
 
 
